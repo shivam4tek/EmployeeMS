@@ -19,6 +19,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.employee.dao.entity.Employee;
 import com.employee.service.IEmployeeService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping(path = "/employee")
 public class EmployeeController {
@@ -35,8 +38,10 @@ public class EmployeeController {
 	private ResponseEntity<Employee> getEmployeeById(@PathVariable Long id) {
 		Optional<Employee> employee = service.getEmployeeById(id);
 		if (!employee.isPresent()) {
+			log.info("Employee with id " + id + " does not exists");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+		log.info("Found Employee:: " + employee);
 		return new ResponseEntity<Employee>(employee.get(), HttpStatus.OK);
 	}
 	
@@ -47,7 +52,7 @@ public class EmployeeController {
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 					.buildAndExpand(savedEmployee.getId())
 					.toUri();
-		
+		log.info("Employee " + savedEmployee + " created. Reference URI:: " + uri);
 		return ResponseEntity.created(uri).build();
 	}
 	
@@ -55,12 +60,13 @@ public class EmployeeController {
 	private ResponseEntity<HttpStatus> updateEmployee(@RequestBody Employee employee, @PathVariable Long id) {
 		Optional<Employee> existingEmployee = service.getEmployeeById(id);
 		if (!existingEmployee.isPresent()) {
+			log.info("Employee with id " + id + " does not exists");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
 		employee.setId(id);
 		service.createOrUpdateEmployee(employee);
-		
+		log.info("Updated Employee:: " + employee);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
@@ -68,9 +74,11 @@ public class EmployeeController {
 	private ResponseEntity<HttpStatus> deleteEmployee(@PathVariable Long id) {
 		Optional<Employee> existingEmployee = service.getEmployeeById(id);
 		if (!existingEmployee.isPresent()) {
+			log.info("Employee with id " + id + " does not exists");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		service.deleteEmployee(id);
+		log.info("Found Employee:: " + existingEmployee.get());
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
