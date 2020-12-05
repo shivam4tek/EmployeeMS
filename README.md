@@ -6,6 +6,9 @@ Below are the prerequisites to run the application.
 
 * Run MYSQL
 * Update MYSQL Configuration in /src/main/resources/application.properties in spring.datasource.url=jdbc:mysql://<MYSQL_HOST>:<MYSQL_PORT>/employee_db?serverTimezone=UTC
+* Insert data given in the Assignment PDF. This data is required to run the test cases. <br >
+INSERT INTO `employee` (`id`, `first_name`, `last_name`, `email`, `phone`) VALUES
+(2, 'Hoston', 'lindey', 'hl@gmail.com', '90908989899');
 
 ### EXTRACT and BUILD PROJECT
 
